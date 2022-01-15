@@ -1,0 +1,212 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#navbar,
+#footer {
+    background-color: #262626;
+    min-height: 10vh;
+}
+
+#logo-img {
+    height: 6vh;
+}
+
+#content {
+    background-color: #474747;
+    height: 80vh;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.content-center {
+    height: 80vh;
+}
+
+#login-card {
+    background-color: #363636;
+    box-shadow: 0 0 5px #262626;
+}
+
+.horizontal-items-preview-list {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.horizontal-items-preview-list .item-preview {
+    position: relative;
+}
+
+.horizontal-items-preview-list .img-preview {
+    height: 30vh;
+    border-radius: 4px;
+    display: relative;
+}
+
+.ver-mais-button {
+    border-radius: 0 5px 5px 0;
+    width: 10vw;
+    height: 30vh;
+}
+
+.title-preview {
+    position: absolute;
+    height: 30vh;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    background-color: rgba(38, 38, 38, 0.8);
+    cursor: pointer;
+    border-radius: 3px;
+    overflow-y: auto !important;
+}
+
+.title-preview:hover {
+    opacity: 1;
+}
+
+@media (max-width: 992px) {
+    .title-preview {
+        opacity: 0.8;
+        font-weight: bold;
+    }
+    .users-links {
+        width: 100%;
+    }
+}
+
+.vertical-items-preview-list .item-preview .overview {
+    height: 14vh;
+    overflow-y: auto;
+}
+
+.vertical-items-preview-list .img-preview {
+    height: 30vh;
+}
+
+.vertical-items-preview-list .item-preview:hover {
+    opacity: 0.6;
+}
+
+.item-poster {
+    box-shadow: 0 0 5px 1px #262626;
+}
+
+.text-shadow {
+    text-shadow: 0 0px 2px #262626;
+}
+
+#details-average {
+    border-style: outset !important;
+}
+
+#chat-link {
+    height: 8vh;
+}
+
+.tabs {
+    border-color: #363636;
+}
+
+.tabs button {
+    border-radius: 0 !important;
+    color: white!important;
+}
+
+.tabs .nav-link.active {
+    background-color: #7952b3;
+    color: #fff;
+    border-color: #7952b3;
+}
+
+.tabs .nav-link:focus {
+    border-color: #7952b3;
+}
+
+.tabs .nav-link:hover {
+    background-color: rgba(121, 82, 179, 0.2);
+    color: #fff;
+    border-color: rgba(121, 82, 179, 0.2);
+}
+
+.tabs i {
+    opacity: 0.3;
+}
+
+.tabs i:hover {
+    opacity: 1;
+}
+
+#details-tab-content {
+    height: 72vh;
+}
+
+#topics-list,
+#topic-card {
+    height: 65vh !important;
+    background-color: rgba(54, 54, 54, 0.4);
+}
+
+#topics-list .card-body,
+#topic-card .card-body {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#topics-list .img-preview,
+#topic-card .img-preview {
+    height: 10vh;
+}
+
+#topic-link {
+    background-color: rgb(38, 38, 38, 3.7);
+}
+
+#topic-card {
+    height: 70vh !important;
+}
+
+#topic-title-card {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+#msg-area {
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#mensagem-input:focus {
+    box-shadow: 0 0 0 0 !important;
+}
+
+.message,
+.message>.message-card {
+    min-width: 5vh;
+}
+
+.custom-scrollbar-primary::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    background-color: rgba(30, 30, 30, 0.2);
+}
+
+.custom-scrollbar-primary::-webkit-scrollbar {
+    width: 12px;
+    height: 10px;
+}
+
+.custom-scrollbar-primary::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #7952b3;
+    box-shadow: 0 0 2px 1px #000 inset;
+}
+
+.custom-scrollbar-primary {
+    scrollbar-color: #7952b3 rgba(30, 30, 30, 0.2);
+    scrollbar-width: thin;
+}

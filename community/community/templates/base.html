@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/modified-bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/favicon.png' %}"/>
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <nav id="navbar" class="navbar navbar-expand-lg navbar-dark d-flex justify-content-between px-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="{% url 'my_site:index' %}">
+                    <img id="logo-img" src="{% static 'img/logo.png' %}" alt="Logo" class="logo">
+                </a>
+                <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                    <ul class="navbar-nav ms-auto d-flex align-items-center">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item dropdown text-center users-links ms-3">
+                                <button type="button" class="btn btn-primary btn-sm dropdown-toggle text-center users-links" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Usuário
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-lg-end text-center users-links" aria-labelledby="navbarDropdown">
+                                    <li><a class="dropdown-item text-center users-links" href="{% url 'users:edit_user' %}">Alterar dados do usuário</a></li>
+                                    <li><a class="dropdown-item text-center users-links" href="{% url 'users:logout_user' %}">Sair</a></li>
+                                </ul>
+                            </li>
+                            {% if user.is_superuser %}
+                                <li class="nav-item users-links">
+                                    <a class="nav-link users-links" href="{% url 'admin:index' %}">
+                                        <button class="btn btn-outline-primary btn-sm users-links">Admin</button>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        {% else %}
+                            <li class="nav-item users-links ms-3">
+                                <a class="nav-link users-links" href="{% url 'users:login_user' %}">
+                                    <button class="btn btn-primary btn-sm users-links">Entrar</button>
+                                </a>
+                            </li>
+                            <li class="nav-item users-links">
+                                <a class="nav-link users-links" href="{% url 'users:register_user' %}">
+                                    <button class="btn btn-primary btn-sm users-links">Cadastro</button>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main id="content" class="text-light">
+        {% block content %} 
+        {% endblock %}
+    </main>
+
+    <footer id="footer" class="d-flex justify-content-center align-items-center text-white">
+        <div class="text-center">
+            @ 2022 Copyright: Ailton Gabriel de Oliveira
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

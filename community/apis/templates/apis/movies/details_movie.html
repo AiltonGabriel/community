@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Community - {{movie.title}}{% endblock %}
+
+{% block content %}
+    {% load static %}
+
+    <div class="content-center d-flex flex-column justify-content-between">    
+        <ul id="chat-link" class="nav nav-tabs tabs bg-secondary text-white" id="details-tab" role="tablist">
+            <li class="nav-item col-6 d-flex" role="presentation">
+                <button class="nav-link col-12 active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details" type="button" role="tab" aria-controls="details" aria-selected="true">
+                    <i class="bi bi-card-text me-2"></i>
+                    Informações
+                </button>
+            </li>
+            <li class="nav-item col-6 d-flex" role="presentation">
+                <button class="nav-link col-12" id="discussions-tab" data-bs-toggle="tab" data-bs-target="#discussions" type="button" role="tab" aria-controls="discussions" aria-selected="false">
+                    <i class="bi bi-chat-dots-fill me-2"></i>
+                    Discussões
+                </button>
+            </li>
+        </ul>
+        
+        <div id="details-tab-content" class="tab-content">
+            <div class="tab-pane fade show active" id="details" role="tabpanel" aria-labelledby="details-tab">
+                <div id="item-details" class="px-5 py-4 col-12 d-flex flex-column custom-scrollbar-primary">
+                    <div class="d-flex flex-column flex-lg-row mb-3">
+                        {% if movie.poster_path %}
+                            <img class="item-poster col-12 col-lg-2" src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}" alt="{{movie.title}}" class="img-fluid">
+                        {% else %}
+                            <img class="item-poster col-12 col-lg-2" src="{% static 'apis/imgs/no_thumb.png' %}" alt="{{movie.title}}" class="img-fluid">
+                        {% endif %}
+                        <div class="col-12 col-lg-10 ps-lg-4">
+                            <div class="col-md-12">
+                                <div class="bg-primary p-2 rounded mb-3">
+                                    <div class="d-flex align-items-baseline justify-content-between">
+                                        <div class="d-flex align-items-baseline col-9">
+                                            <h1 class="me-3">{{movie.title}}</h1>
+                                            <small class="text-white-50 col-4">
+                                                <i class="bi bi-calendar2-plus-fill mx-1"></i>
+                                                {{movie.release_date}}
+                                            </small>
+                                        </div>
+                                        <div class="fs-3 fw-bold text-shadow col-3 float-end text-end">
+                                            Nota <span id="details-average" class="border border-3 rounded-circle fs-4 p-2 fw-b ms-2">{{movie.vote_average}}</span>
+                                        </div>
+                                    </div>
+                                    <hr class="my-2">
+                                    {{movie.original_title}}
+                                </div>
+
+                                {% if movie.tagline %}
+                                    <p class="text-shadow"><em>"{{movie.tagline}}"</em></p>
+                                {% endif %}
+
+                                <p class="text-shadow"><i class="bi bi-clock-fill text-primary me-2"></i>Duração: <strong>{{movie.runtime}} minutos</strong></p>
+
+                                <div class="d-flex align-items-end mb-3 text-shadow">
+                                    <i class="bi bi-grid-fill text-primary me-2"></i>Categorias: 
+                                    {% for genre in movie.genres  %}
+
+                                        <a href="/data/search/movies/genre?query={{genre.id}}" class="text-decoration-none">
+                                            <button class="btn btn-primary btn-sm ms-2">{{genre.name}}</button>
+                                        </a>
+
+                                    {% endfor %}
+                                </div>
+
+                                <p class="text-shadow"><i class="bi bi-check-circle-fill text-primary me-2"></i>Nº de Votos: <strong>{{movie.vote_count}}</strong></p>
+                                <p class="text-shadow"><i class="bi bi-person-check-fill text-primary me-2"></i>Popularidade: <strong>{{movie.popularity}}</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                    <h2 class="text-center">Sinopse</h2>
+                    <hr>
+                    <p>{{movie.overview}}</p>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="discussions" role="tabpanel" aria-labelledby="discussions-tab">
+                <div class="mx-5 my-4 d-flex justify-content-center row">
+                    <div id="topics-list" class="card text-white border-primary mb-3 p-0 col-12">
+                        <div class="card-header h2 bg-primary col-12 d-flex justify-content-between">
+                            <div class="col-8">
+                                {% if movie.poster_path %}
+                                    <img class="img-preview" src="https://image.tmdb.org/t/p/w500/{{movie.poster_path}}" alt="{{movie.title}}" class="img-fluid">
+                                {% else %}
+                                    <img class="img-preview" src="{% static 'apis/imgs/no_thumb.png' %}" alt="{{movie.title}}" class="img-fluid">
+                                {% endif %}
+                            
+                                Discussões - {{movie.title}}
+                            </div>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'apis:create_topic' parent_item_type="movies" id_parent_item=movie.id %}" class="text-decoration-none d-flex">
+                                    <button class="btn btn-dark btn-sm fs-5 px-4">
+                                        Criar Tópico
+                                        <i class="bi bi-bookmark-plus-fill text-primary ms-2"></i>
+                                    </button>
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="card-body pb-2 custom-scrollbar-primary">
+                            {% for topic in topics %}
+                                <a href="{% url 'apis:topic' item_type=topic.parent_item_type topic_id=topic.id%}" class="text-decoration-none mb-2">
+                                    <div class="d-flex justify-content-between align-item-center border rounded border-primary bg-dark py-2 px-3 topic-link mb-3">
+                                        <div class="text-white">
+                                            {{topic.title}}
+                                        </div>
+                                        <div>
+                                            <i class="bi bi-chat-dots-fill me-2"></i>
+                                            <i class="bi bi-chevron-compact-right"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                            
+                        </div>
+                    </div>
+                <div>
+            </div>
+        <div>
+    <div>
+    
+{% endblock %}

@@ -1,0 +1,14 @@
+<div class="d-flex justify-content-center align-items-start mx-5 my-4">
+    <form action="{% url 'apis:search' %}/{{type}}" method="post" class="d-flex col-12">
+        {% csrf_token %}
+        <div class="card bg-secondary text-white d-flex col-12">
+            <div class="card-header h2 pb-3">Pesquisar {{name}}</div>
+            <div class="card-body d-flex flex-column flex-lg-row pb-2">
+                <div class="col-12 col-lg-10 my-2 my-lg-0 d-flex">
+                    <input type="text" name="query" class="form-control input-group-lg bg-dark text-white border-secondary rounded-pill me-2 px-4 py-3 py-lg-0" placeholder="Pesquisar {{name}}" value="{{ query }}">
+                </div>
+                <button class="btn btn-primary col-12 col-lg-2 my-2 my-lg-0 btn-lg border-secondary rounded-pill" type="submit"><i class="bi bi-search me-2"></i>Pesquisar</button>
+            </div>
+        </div>
+    </form>
+</div>

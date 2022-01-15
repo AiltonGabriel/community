@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Community - Séries {{genre.name}}{% endblock %}
+
+{% block content %}
+
+    {% with type="tv" name="Filmes"  %}
+        {% include 'apis/search_type_bar.html' %}
+    {% endwith %}
+    
+    <hr class="mx-5">
+    <h2 class="px-5">Séries - {{genre.name}}</h2>
+
+    {% if result and result.total_results > 0 %}
+        {% with query=genre.id  %}
+            {% include 'apis/pagination.html' %}
+        {% endwith %}
+        
+        <div class="vertical-items-preview-list px-5">
+            {% load static %}
+            {% for tv in result.results %}
+                <a href="/data/details/tv/{{ tv.id }}" class="text-decoration-none">
+                    <div class="card mb-3 bg-secondary item-preview d-flex text-white">
+                        <div class="d-flex justify-content-start">
+                            <span>
+                                {% if tv.poster_path %}
+                                    <img class="img-preview rounded-start" src="https://image.tmdb.org/t/p/w500/{{tv.poster_path}}" alt="{{tv.name}}" class="img-fluid">
+                                {% else %}
+                                    <img class="img-preview rounded-start" src="{% static 'apis/imgs/no_thumb.png' %}" alt="{{tv.name}}" class="img-fluid">
+                                {% endif %}
+                            </span>
+                            <span>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{tv.name}}</h5>
+                                    <p class="card-text"><small class="text-muted">{{tv.release_date}}</small></p>
+                                    <p class="card-text overview custom-scrollbar-primary">{{tv.overview}}</p>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %} 
+            
+        </div>
+        {% include 'apis/pagination.html' %}
+    {% else %}
+        <div class="card text-white bg-secondary mb-3 mx-5">
+            <div class="card-header h2 pb-3 text-center">Nenhum resultado encontrado!</div>
+        </div>
+    {% endif %}
+
+    
+
+
+{% endblock %}

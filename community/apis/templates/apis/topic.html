@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}Community - {{movie.title}}{% endblock %}
+
+{% block content %}
+    {% load static %}
+
+    <div class="modal fade" id="info-modal" aria-hidden="true"tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark h4 fw-normal">
+                <div class="modal-header">
+                    <div class="modal-title" id="exampleModalToggleLabel"><span class="fw-bold me-2">Título: </span>{{topic.title}}</div>
+                    <button type="button" class="btn-close btn-outline-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <span class="fw-bold me-2">Descrição: </span>{{topic.description}}
+                </div>
+                <div class="modal-footer">
+                    <span class="fw-bold me-2">Criado por: </span>{{topic.user.username}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mx-5 my-4 d-flex justify-content-center row">
+        <div id="topic-card" class="card text-white border-primary border-2 mb-3 p-0 col-12">
+            <div class="card-header bg-primary d-flex justify-content-between">
+                <div class="col-9 h2 d-flex align-items-center overflow-hidden">
+                    <span class="fw-bold me-3">Tópico:</span> <span id="topic-title-card" class="d-flex align-items-center text-white-50 fw-normal col-9 custom-scrollbar-primary px-2">{{topic.title}}</span>
+                </div>
+                <a class="text-decoration-none" data-bs-toggle="modal" href="#info-modal" role="button">
+                    <button class="btn btn-dark btn-sm fs-5 px-4">
+                        Informações do Tópico
+                    </button>
+                </a>
+            </div>
+            <div class="card-body bg-secondary p-0 d-flex flex-column justify-content-between">
+                <div id="msg-area" class="d-flex flex-column-reverse justify-content-start custom-scrollbar-primary p-2">
+                    
+                </div>
+                <div id="input-msg-area" class="d-flex bg-dark rounded-top m-2 row">
+                    <div class="col-10 col-lg-10 my-2 my-lg-0 d-flex">
+                        <input type="text" name="mensagem" id="mensagem-input" class="form-control input-group-lg bg-dark text-white border-dark px-4 rounded-0" placeholder="Mensagem">
+                    </div>
+                    <button id="bnt-enviar" class="btn btn-primary col-2" type="submit">Enviar</button>
+                </div>
+                
+            </div>
+        </div>
+    <div>
+
+    <script src="{% static 'apis/js/firebase/firebase-app.js' %}"></script>
+	<script src="{% static 'apis/js/firebase/firebase-analytics.js' %}"></script>
+	<script src="{% static 'apis/js/firebase/firebase-database.js' %}"></script>
+	<script src="{% static 'apis/js/firebase/firebase-storage.js' %}"></script>
+	<script src="{% static 'apis/js/firebase/firebase-auth.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+
+    <script type="module">
+        var enviando = false;
+        var config = {
+            apiKey: "{{firebase_key}}",
+            authDomain: "community-338001.firebaseapp.com",
+            projectId: "community-338001",
+            storageBucket: "community-338001.appspot.com",
+            messagingSenderId: "208492254440",
+            appId: "1:208492254440:web:ab6c5d53410c54fd48a55d",
+            measurementId: "G-PX0B3WXDT0"
+        };
+    
+        firebase.initializeApp(config);
+        firebase.analytics();
+
+        var database = firebase.database();
+
+        function send_message(topic, user_id, username, type, content){
+            database.ref(`topics/${topic}/messages/`).push().set({
+                'user_id': user_id,
+                'username': username,
+                'type': type,
+                'content' : content
+            }).then((snap) => {
+                enviando = false;
+                $('#msg-area').scrollTop(0);
+                $("#mensagem-input").val('');
+            });;
+        }
+
+        function load_topic_messages(topic){
+            let myUserId = {{user.id}};
+            let bgMsg;
+            let msgsRef = database.ref(`topics/${topic}/messages/`).orderByChild("time").limitToLast(50);
+            msgsRef.once('value', function(snapshot) {
+                if (snapshot.val()) {
+                    Object.keys(snapshot.val()).forEach(function(childSnapshotKey) {
+                        let key = childSnapshotKey;
+                        let msg = snapshot.val()[key];
+                        if(msg['user_id'] == myUserId){
+                            bgMsg = 'bg-primary';
+                        } else {
+                            bgMsg = 'bg-dark';
+                        }
+
+                        $("#msg-area").html(
+                            `<div class="message">
+                                <div class="message-card card text-white ${bgMsg} my-3">
+                                    <div class="card-header">${msg['username']}</div>
+                                    <div class="card-body">
+                                        <p class="card-text">${msg['content']}</p>
+                                    </div>
+                                </div>
+                            </div>` + $("#msg-area").html()
+                        )
+                        $('#msg-area').scrollTop(0);
+                    });
+                }
+            });
+        }
+
+        function create_topic_messages_listener(topic){
+            let myUserId = {{user.id}};
+            let bgMsg;
+            let msgsRef = database.ref(`topics/${topic}/messages/`).orderByChild("time").limitToLast(50);
+            msgsRef.on('child_added', function(snapshot) {
+                let key = snapshot.key;
+                let msg = snapshot.val();
+                if(msg['user_id'] == myUserId){
+                    bgMsg = 'bg-primary';
+                } else {
+                    bgMsg = 'bg-dark';
+                }
+
+                $("#msg-area").html(
+                    `<div class="message">
+                        <div class="message-card card text-white ${bgMsg} my-3">
+                            <div class="card-header">${msg['username']}</div>
+                            <div class="card-body">
+                                <p class="card-text">${msg['content']}</p>
+                            </div>
+                        </div>
+                    </div>` + $("#msg-area").html()
+                )
+            });
+        }
+
+        function is_str_empty(str){
+            return str.replace(/\s/g, '').length == 0;
+        }
+
+        $(document).ready(function(){
+            load_topic_messages('{{topic.id}}');
+            create_topic_messages_listener('{{topic.id}}');
+
+            $("#bnt-enviar").click(function(){
+                if(enviando == false && !is_str_empty($("#mensagem-input").val())){
+                    enviando = true;
+                    let msg = $("#mensagem-input").val();
+                    let user_id = {{user.id}};
+                    let username = '{{user.username}}';
+                    let type = 'text';
+                    send_message('{{topic.id}}', user_id, username, type, msg);
+                }
+            });
+
+            $("#mensagem-input").keypress(function(e){
+                if(e.keyCode == 13)
+                {
+                    $("#bnt-enviar").click()
+                }
+            });
+        });
+    </script>
+{% endblock %}

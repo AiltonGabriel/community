@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Community - Livros {{author}}{% endblock %}
+
+{% block content %}
+
+    {% with type="books" name="Livros"  %}
+        {% include 'apis/search_type_bar.html' %}
+    {% endwith %}
+    
+    <h2 class="px-5">Livros - {{author}}</h2>
+
+    {% if result and result.totalItems > 0 %}
+        {% with query=author  %}
+            {% include 'apis/pagination.html' %}
+        {% endwith %}
+        
+        <div class="vertical-items-preview-list px-5">
+            {% load static %}
+            {% for book in result.items %}
+                <a href="/data/details/books/{{ book.id }}" class="text-decoration-none">
+                    <div class="card mb-3 bg-secondary item-preview d-flex text-white">
+                        <div class="d-flex justify-content-start">
+                            <span>
+                                {% if book.volumeInfo.imageLinks.thumbnail %}
+                                    <img class="img-preview rounded-start" src="{{book.volumeInfo.imageLinks.thumbnail}}" alt="{{book.volumeInfo.title}}" class="img-fluid">
+                                {% else %}
+                                    <img class="img-preview rounded-start" src="{% static 'apis/imgs/no_thumb.png' %}" alt="{{book.volumeInfo.title}}" class="img-fluid">
+                                {% endif %}
+                            </span>
+                            <span>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{book.volumeInfo.title}}</h5>
+                                    <p class="card-text mb-0"><small class="text-muted">
+                                        {% for author in book.volumeInfo.authors %}
+                                            {{author}}
+                                            {% if forloop.last is not True %}, {% endif %}
+                                        {% endfor %}
+                                    </small></p>
+                                    <p class="card-text"><small class="text-muted">{{book.volumeInfo.publishedDate}}</small></p>
+                                    <p class="card-text overview custom-scrollbar-primary">{{book.volumeInfo.description}}</p>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %} 
+            
+        </div>
+        {% include 'apis/pagination.html' %}
+    {% else %}
+        <div class="card text-white bg-secondary mb-3 mx-5">
+            <div class="card-header h2 pb-3 text-center">Nenhum resultado encontrado!</div>
+        </div>
+    {% endif %}
+
+    
+
+
+{% endblock %}
