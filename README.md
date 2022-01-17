@@ -26,7 +26,7 @@ python community/manage.py runserver
 
 # Capturas de Tela do Projeto
 ![Pesquisar](community/screenshots/search.png)
-![Pesquisar_Livros](community/screenshots/search_books.png)
+![Pesquisar_Livros](community/screenshots/search-books.png)
 ![Detalhes_Filme](community/screenshots/details_movie.png)
 ![Lista_de_Tópicos](community/screenshots/topics_list.png)
-![Entrar](community/community/login.png)
+![Entrar](community/screenshots/login.png)
