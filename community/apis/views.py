@@ -32,7 +32,7 @@ def topic(request, item_type, topic_id):
             except:
                 pass
 
-    return render(request, 'apis/topic.html', {'topic': topic, 'about': about, 'firebase_key': API_KEYS['firebase']})
+    return render(request, 'apis/topic.html', {'topic': topic, 'about': about, 'firebase_credentials': FIREBASE_CREDENTIALS})
 
 @login_required
 def create_topic(request, id_parent_item, parent_item_type):

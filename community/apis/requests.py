@@ -3,9 +3,17 @@ from django.conf import settings
 
 API_KEYS = {
     'tmdb': settings.TMDB_API_KEY,
-    'google_books': settings.GOOGLE_BOOKS_API_KEY,
-    'firebase': settings.FIREBASE_API_KEY
+    'google_books': settings.GOOGLE_BOOKS_API_KEY
 }
+
+FIREBASE_CREDENTIALS = """apiKey: \'{}\',
+            authDomain: \"{}\",
+            projectId: \"{}\",
+            storageBucket: \"{}\",
+            messagingSenderId: \"{}\",
+            appId: \"{}\",
+            measurementId: \"{}\"
+        """.format(settings.FIREBASE_API_KEY, settings.FIREBASE_AUTH_DOMAIN, settings.FIREBASE_PROJECT_ID, settings.FIREBASE_STORAGE_BUCKET, settings.FIREBASE_MESSAGING_SENDER_ID, settings.FIREBASE_APP_ID, settings.FIREBASE_MEASUREMENT_ID)
 
 #-----------------------------------------------------------------------------------------------------------------------
 # Movies - Api The Movie Database(TMDB)

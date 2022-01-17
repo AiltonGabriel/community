@@ -58,14 +58,9 @@
 
     <script type="module">
         var enviando = false;
+        
         var config = {
-            apiKey: "{{firebase_key}}",
-            authDomain: "community-338001.firebaseapp.com",
-            projectId: "community-338001",
-            storageBucket: "community-338001.appspot.com",
-            messagingSenderId: "208492254440",
-            appId: "1:208492254440:web:ab6c5d53410c54fd48a55d",
-            measurementId: "G-PX0B3WXDT0"
+            {{firebase_credentials | safe}}
         };
     
         firebase.initializeApp(config);
